@@ -29,5 +29,6 @@ setup(
     author_email=AUTHOR_EMAIL,
     packages=find_packages(exclude=['tests']),
     install_requires=_requirements,
-    include_package_data=True
+    include_package_data=True,
+    python_requires='>3.10',
 )
