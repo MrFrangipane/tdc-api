@@ -1,26 +1,14 @@
-from typing import Annotated, List
-from uuid import UUID, uuid4
-
 from fastapi import FastAPI
-from pydantic import BaseModel
+
+from tdcwebapi.expenses.routes import router as router_expenses
+from tdcwebapi.projects.routes import router as router_projects
+
 
 app = FastAPI(title="TDC Web API")
+app.include_router(router_expenses)
+app.include_router(router_projects)
 
 
-class Expense(BaseModel):
-    id: UUID
-    caption: str
-    amount: float
-
-
-@app.get("/expenses/")
-def read_expenses() -> List[Expense]:
-    return [
-        Expense(id=uuid4(), caption="Achat tissu", amount=130.19),
-        Expense(id=uuid4(), caption="Achat lyres", amount=2503.0)
-    ]
-
-
-@app.post("/expenses/")
-def post_expense(expense: Expense):
-    return "OK"
+@app.get("/")
+def root():
+    return {"message": "Hello TDC API"}
