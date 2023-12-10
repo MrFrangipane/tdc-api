@@ -26,17 +26,7 @@ def post(expense: Expense):
 
 
 @router.get("/")
-def get(
-        name: str | None = None,
-        amount_min: float | None = None,
-        amount_max: float | None = None,
-        date_min: date | None = None,
-        date_max: date | None = None,
-        needs_refund: bool | None = None,
-        refunded: bool | None = None,
-        date_refund_min: date | None = None,
-        date_refund_max: date | None = None
-) -> List[Expense]:
+def get() -> List[Expense]:
     return [
         Expense(
             id=uuid4(),
@@ -64,3 +54,23 @@ def get(expense_id: UUID) -> Expense:
         date_=date.today(),
         project=_default_project
     )
+
+
+@router.get("/{project_id}/expenses")
+def get_project(project_id: UUID) -> List[Expense]:
+    return [
+        Expense(
+            id=uuid4(),
+            caption="Achat tissu",
+            amount=130.19,
+            date_=date.today(),
+            project=_default_project
+        ),
+        Expense(
+            id=uuid4(),
+            caption="Achat lyres",
+            amount=2503.0,
+            date_=date.today(),
+            project=_default_project
+        )
+    ]

@@ -4,7 +4,7 @@ from tdcwebapi.expenses.routes import router as router_expenses
 from tdcwebapi.projects.routes import router as router_projects
 
 
-app = FastAPI(title="TDC Web API")
+app = FastAPI(title="TDC API")
 app.include_router(router_expenses)
 app.include_router(router_projects)
 
