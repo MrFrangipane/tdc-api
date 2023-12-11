@@ -21,43 +21,7 @@ _default_project = Project(
 )
 
 
-@router.post("/")
-def post(expense: Expense, auth_result: str = Security(_verifier.verify_http)):
-    return "OK"
-
-
-@router.get("/")
-def get(auth_result: str = Security(_verifier.verify_http)) -> List[Expense]:
-    return [
-        Expense(
-            id=uuid4(),
-            caption="Achat tissu",
-            amount=130.19,
-            date_=date.today(),
-            project=_default_project
-        ),
-        Expense(
-            id=uuid4(),
-            caption="Achat lyres",
-            amount=2503.0,
-            date_=date.today(),
-            project=_default_project
-        )
-    ]
-
-
-@router.get("/{expense_id}")
-def get(expense_id: UUID, auth_result: str = Security(_verifier.verify_http)) -> Expense:
-    return Expense(
-        id=expense_id,
-        caption="Achat tissu",
-        amount=130.19,
-        date_=date.today(),
-        project=_default_project
-    )
-
-
-@router.get("/{project_id}/expenses")
+@router.get("/{project_id}/expenses", name="")
 def get_project(project_id: UUID, auth_result: str = Security(_verifier.verify_http)) -> List[Expense]:
     return [
         Expense(
@@ -75,3 +39,25 @@ def get_project(project_id: UUID, auth_result: str = Security(_verifier.verify_h
             project=_default_project
         )
     ]
+
+
+@router.post("/{project_id}/expenses", name="")
+def post(project_id: UUID, expense: Expense, auth_result: str = Security(_verifier.verify_http)) -> Expense:
+    new_expense = Expense(
+        id=uuid4(),
+        caption="New Expense",
+        amount=0,
+        date_=date.today(),
+        project=_default_project
+    )
+    return new_expense
+
+
+@router.put("/", name="")
+def update(project: Expense, auth_result: str = Security(_verifier.verify_http)) -> None:
+    pass
+
+
+@router.delete("/", name="")
+def remove(project: Expense, auth_result: str = Security(_verifier.verify_http)) -> None:
+    pass

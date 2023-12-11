@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.websocket("/")
+@router.websocket("/", name="Websocket")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     token = await websocket.receive_text()
@@ -34,8 +34,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             await asyncio.sleep(1)
-            await websocket.send_text("")
-            print(".")
+            # TODO : work here
 
     except (ConnectionClosedOK, ConnectionClosedError, WebSocketDisconnect):
         pass
