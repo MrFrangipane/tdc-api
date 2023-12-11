@@ -2,11 +2,13 @@ from fastapi import FastAPI
 
 from tdcwebapi.expenses.routes import router as router_expenses
 from tdcwebapi.projects.routes import router as router_projects
+from tdcwebapi.multiplayer import router as router_multiplayer
 
 
 app = FastAPI(title="TDC API")
-app.include_router(router_expenses)
+app.include_router(router_multiplayer)
 app.include_router(router_projects)
+app.include_router(router_expenses)
 
 
 @app.get("/")

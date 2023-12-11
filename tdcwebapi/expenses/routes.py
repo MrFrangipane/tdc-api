@@ -2,11 +2,18 @@ from datetime import date
 from typing import List
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Security
 
 from tdcwebapi.expenses.model import Expense
 from tdcwebapi.projects.model import Project
+from tdcwebapi.security.token_verifier import TokenVerifier
 
+
+router = APIRouter(
+    prefix="/expenses",
+    tags=["expenses"]
+)
+_verifier = TokenVerifier()
 
 _default_project = Project(
     id=uuid4(),
@@ -14,19 +21,13 @@ _default_project = Project(
 )
 
 
-router = APIRouter(
-    prefix="/expenses",
-    tags=["expenses"]
-)
-
-
 @router.post("/")
-def post(expense: Expense):
+def post(expense: Expense, auth_result: str = Security(_verifier.verify_http)):
     return "OK"
 
 
 @router.get("/")
-def get() -> List[Expense]:
+def get(auth_result: str = Security(_verifier.verify_http)) -> List[Expense]:
     return [
         Expense(
             id=uuid4(),
@@ -46,7 +47,7 @@ def get() -> List[Expense]:
 
 
 @router.get("/{expense_id}")
-def get(expense_id: UUID) -> Expense:
+def get(expense_id: UUID, auth_result: str = Security(_verifier.verify_http)) -> Expense:
     return Expense(
         id=expense_id,
         caption="Achat tissu",
@@ -57,7 +58,7 @@ def get(expense_id: UUID) -> Expense:
 
 
 @router.get("/{project_id}/expenses")
-def get_project(project_id: UUID) -> List[Expense]:
+def get_project(project_id: UUID, auth_result: str = Security(_verifier.verify_http)) -> List[Expense]:
     return [
         Expense(
             id=uuid4(),

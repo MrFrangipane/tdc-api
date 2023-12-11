@@ -1,5 +1,7 @@
 fastapi
 pydantic
+pydantic-settings
+pyjwt[crypto]
 uvicorn[standard]
 websockets
 # ? pydantic[email]
