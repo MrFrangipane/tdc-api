@@ -1,20 +1,17 @@
-import logging
 from typing import Any
 
 from fastapi import WebSocket
 
 from tdcwebapi.components.security.abstract import AbstractSecurity
-
-
-_logger = logging.getLogger(__name__)
+from tdcwebapi.logger import logger
 
 
 class NoAuthSecurity(AbstractSecurity):
 
     def __init__(self):
-        _logger.warning("! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !")
-        _logger.warning("! No authentication, DONT USE IN PRODUCTION !")
-        _logger.warning("! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !")
+        logger.warning("! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !")
+        logger.warning("! No authentication, DONT USE IN PRODUCTION !")
+        logger.warning("! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !")
 
     def http(self) -> Any:
         return ""
