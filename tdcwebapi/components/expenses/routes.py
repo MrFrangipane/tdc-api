@@ -2,19 +2,17 @@ from datetime import date
 from typing import List
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Security
+from fastapi import APIRouter
 
-from tdcwebapi.expenses.model import Expense
-from tdcwebapi.projects.model import Project
-from tdcwebapi.security.token_verifier import TokenVerifier
+from tdcwebapi.components.expenses.model import Expense
+from tdcwebapi.components.projects.model import Project
+from tdcwebapi.components.security import api as security
 
 
 router = APIRouter(
     prefix="/expenses",
     tags=["expenses"]
 )
-_verifier = TokenVerifier()
-
 _default_project = Project(
     id=uuid4(),
     name="Frais Généraux"
@@ -22,7 +20,7 @@ _default_project = Project(
 
 
 @router.get("/{project_id}/expenses", name="")
-def get_project(project_id: UUID, auth_result: str = Security(_verifier.verify_http)) -> List[Expense]:
+def get_project(project_id: UUID, auth_result: str = security.http()) -> List[Expense]:
     return [
         Expense(
             id=uuid4(),
@@ -42,7 +40,7 @@ def get_project(project_id: UUID, auth_result: str = Security(_verifier.verify_h
 
 
 @router.post("/{project_id}/expenses", name="")
-def post(project_id: UUID, expense: Expense, auth_result: str = Security(_verifier.verify_http)) -> Expense:
+def post(project_id: UUID, expense: Expense, auth_result: str = security.http()) -> Expense:
     new_expense = Expense(
         id=uuid4(),
         caption="New Expense",
@@ -54,10 +52,10 @@ def post(project_id: UUID, expense: Expense, auth_result: str = Security(_verifi
 
 
 @router.put("/", name="")
-def update(project: Expense, auth_result: str = Security(_verifier.verify_http)) -> None:
+def update(project: Expense, auth_result: str = security.http()) -> None:
     pass
 
 
 @router.delete("/", name="")
-def remove(project: Expense, auth_result: str = Security(_verifier.verify_http)) -> None:
+def remove(project: Expense, auth_result: str = security.http()) -> None:
     pass

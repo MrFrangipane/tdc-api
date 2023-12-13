@@ -3,7 +3,7 @@ from datetime import date
 
 from pydantic import BaseModel
 
-from tdcwebapi.projects.model import Project
+from tdcwebapi.components.projects.model import Project
 
 
 class Expense(BaseModel):

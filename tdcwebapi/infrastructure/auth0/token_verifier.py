@@ -4,8 +4,8 @@ from fastapi import Depends
 from fastapi.security import SecurityScopes, HTTPAuthorizationCredentials, HTTPBearer
 import jwt
 
-from tdcwebapi.security.settings import get_settings
-from tdcwebapi.security.exceptions import UnauthorizedException, UnauthenticatedException
+from tdcwebapi.components.security.exceptions import UnauthorizedException, UnauthenticatedException
+from tdcwebapi.infrastructure.auth0.settings import get_settings
 
 
 class TokenVerifier:

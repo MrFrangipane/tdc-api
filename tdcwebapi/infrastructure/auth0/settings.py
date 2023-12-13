@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic_settings import BaseSettings
 
 
-_ROOT_FOLDER = Path(__file__).parent.parent
+_ROOT_FOLDER = Path(__file__).parent.parent.parent
 
 
 class Settings(BaseSettings):

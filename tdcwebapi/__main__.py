@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-from tdcwebapi.expenses.routes import router as router_expenses
-from tdcwebapi.projects.routes import router as router_projects
-from tdcwebapi.multiplayer import router as router_multiplayer
+from tdcwebapi import configurator  # must be imported before anything else (could be better)
+from tdcwebapi.components.expenses.routes import router as router_expenses
+from tdcwebapi.components.projects.routes import router as router_projects
+from tdcwebapi.components.multiplayer.routes import router as router_multiplayer
 
 
 app = FastAPI(title="TDC API")
