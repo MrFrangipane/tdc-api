@@ -12,7 +12,7 @@ class ConnectionManager:
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
-        logger.info(f"New connection {websocket}")
+        logger.info(f"New connection WebSocket id={id(websocket)}")
 
         if await security.validate_websocket(websocket):
             logger.info(f"New connection validated")
@@ -21,11 +21,10 @@ class ConnectionManager:
     def disconnect(self, websocket: WebSocket):
         self._websockets.remove(websocket)
 
-    async def send_message(self, websocket: WebSocket, message: str):
-        await websocket.send_text(message)
-
-    async def broadcast_message_to_other(self, websocket: WebSocket, message: str):
-        logger.info(f"Broadcasting message {message}")
-        for connection in self._websockets:
-            if websocket != connection:
-                await connection.send_text(message)
+    async def broadcast_message_to_other(self, websocket_sender: WebSocket, message: str):
+        logger.info(
+            f'Broadcasting message="{message}" from WebSocket id={id(websocket_sender)} to {len(self._websockets) - 1} clients'
+        )
+        for websocket in self._websockets:
+            if websocket != websocket_sender:
+                await websocket.send_text(message)
