@@ -1,12 +1,13 @@
 from datetime import date
-from typing import List
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter
 
+from tdcwebapi.components.authentication import api as authentication
 from tdcwebapi.components.expenses.model import Expense
+from tdcwebapi.components.multiplayer.message_queue import MessageQueueSingleton
 from tdcwebapi.components.projects.model import Project
-from tdcwebapi.components.security import api as security
+from tdcwebapi.components.users.model import User
 
 
 router = APIRouter(
@@ -17,10 +18,12 @@ _default_project = Project(
     id=uuid4(),
     name="Frais Généraux"
 )
+queue = MessageQueueSingleton()
 
 
 @router.get("/{project_id}/expenses", name="")
-def get_project(project_id: UUID, auth_result: str = security.http()) -> List[Expense]:
+async def get_project(project_id: UUID, user: User = authentication.for_request()) -> list[Expense]:
+    await queue.messages.put("expenses_reload")
     return [
         Expense(
             id=uuid4(),
@@ -40,7 +43,8 @@ def get_project(project_id: UUID, auth_result: str = security.http()) -> List[Ex
 
 
 @router.post("/{project_id}/expenses", name="")
-def post(project_id: UUID, expense: Expense, auth_result: str = security.http()) -> Expense:
+async def post(project_id: UUID, expense: Expense, user: User = authentication.for_request()) -> Expense:
+    await queue.messages.put("expenses_reload")
     new_expense = Expense(
         id=uuid4(),
         caption="New Expense",
@@ -52,10 +56,10 @@ def post(project_id: UUID, expense: Expense, auth_result: str = security.http())
 
 
 @router.put("/", name="")
-def update(project: Expense, auth_result: str = security.http()) -> None:
-    pass
+async def update(project: Expense, user: User = authentication.for_request()) -> None:
+    await queue.messages.put("expenses_reload")
 
 
 @router.delete("/", name="")
-def remove(project: Expense, auth_result: str = security.http()) -> None:
-    pass
+async def remove(project: Expense, user: User = authentication.for_request()) -> None:
+    await queue.messages.put("expenses_reload")
