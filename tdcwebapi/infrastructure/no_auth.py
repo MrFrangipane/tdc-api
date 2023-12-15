@@ -11,7 +11,7 @@ class NoAuth(AbstractAuthentication):
         logger.warning("! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !")
 
     def for_request(self) -> User:
-        return self.user_from_token("")
+        return self.user_from_token
 
     def user_from_token(self, token: str) -> User:
         return User(id="12345678", name="NoAuth User")
